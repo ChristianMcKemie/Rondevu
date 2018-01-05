@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Rondevu</title>
+        <link rel="icon" href="/images/favicon.png">
+        <link href="css/application.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/libs/node_modules/nouislider/distribute/nouislider.min.css">
+        <!--link rel="shortcut icon" href="img/favicon.png"-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta charset="utf-8">
+        <script>
+            /* yeah we need this empty stylesheet here. It's cool chrome & chromium fix
+             chrome fix https://code.google.com/p/chromium/issues/detail?id=167083
+             https://code.google.com/p/chromium/issues/detail?id=332189
+             */
+        </script>
+    </head>
+    <body class="background-light">
+        <div class="single-widget-container col-lg-8" style="top: 20%; margin-top:0px;">
+            <section id="settingswindow" class="widget" style="min-width:500px;max-width:60%;">
+                <!--hiding hide-->
+                <header>
+                    <h4>
+                        <i class="fa fa-gear"></i> <span class="name">Settings</span>
+                    </h4>
+                    <div class="widget-controls">
+                    </div>
+                </header>
+                <div class="">
+                    <br>
+                    <br>
+                    <span class="name">Interested In</span>
+                    <br>
+                    <br><br>
+                    <div id="interest-slider" style="margin-left:50px;margin-right:50px;"></div>
+                    <br>
+                    <span class="name">Age Range</span>
+                    <br><br><br>
+                    <div id="age-slider" style="margin-left:50px;margin-right:50px;"></div>
+                    <br>
+                    <span class="name">Distance</span>
+                    <br>
+                    <br><br>
+                    <div id="distance-slider" style="margin-left:50px;margin-right:50px;"></div>
+                    <br>
+                    <span class="name">Location</span>
+                    <br><br>
+                    <br>
+                    <div class="center-block" style="width:138px;">
+                        <input id="zipinput" class="form-control" style="display: block;width: 138px;height: 60px;font-size:30px;" placeholder="ZipCode" type="text" name="zip">
+                    </div>
+                    <br>
+                    <br>
+                    <div class="center-block" style="width:76px;height:32px">
+                        <button style="width:76px;" class="btn btn-transparent btn" id="settings-submit" type="button">Next</button>
+                    </div></div>
+            </section>
+            <section id ="profileeditwindow" class="widget profile hide" style="min-width:500px;max-width:60%;">
+                <!--hiding hide-->
+                <header>
+                    <h4>
+                        <i class="fa fa-user"></i> <span class="name">Profile</span>
+                    </h4>
+                </header>
+                <div class="">
+                    <br>
+                    <br>
+                    <div>
+
+                        <div class="">
+                            <span class="name pull-left">Pictures</span>
+                            <span id="addPic" class="pull-right pointer hide" style="">add</span>
+                            <span id="removePic" class="pull-right pointer hide" style="">remove</span>
+                        </div>
+                    </div>
+                    <br>
+                    <br><br>
+                    <div id="pictureframe" style="" class="center-block">
+                        <div id="main-picture" style="">
+                            <div id="pic1" content="" order ="1" alt=""  class="pic1 picswap" style=""/> </div>
+                    </div>
+                    <div id="pictures" style="">
+                        <span class="pic2-6Frame">
+                            <div id="pic2" content="" order ="2" src="" alt=""  class="picswap pic2-6" style=""/></div>
+                    </span>
+                    <span class="pic2-6Frame">
+                        <div id="pic3" content="" order ="3" src="" alt=""  class="picswap pic2-6" style=""/></div>
+                </span>
+                <span class="pic2-6Frame">
+                    <div id="pic4" content="" order ="4" src="" alt=""  class="picswap pic2-6" style=""/></div>
+                </span>
+                <span class="pic2-6Frame">
+                    <div id="pic5" content="" order ="5" src="" alt=""  class="picswap pic2-6" style=""/></div>
+                </span>
+                <span class="pic2-6Frame">
+                    <div id="pic6" content="" order ="6" src="" alt=""  class="picswap pic2-6" style=""/></div>
+                </span>
+        </div>
+    </div>
+    <br><br>
+    <span class="name">About</span>
+    <textarea id='about' rows='1' placeholder=''></textarea>
+    <span class="name">Education</span>
+    <br>
+    <div id="education" style=""></div>
+    <br>
+    <br>
+    <br>
+    <div class="center-block" style="width:90px;height:32px">
+        <button style="width:90px;" class="btn btn-transparent btn" id="profileedit-submit" type="button">Complete</button>
+    </div>
+</div>
+</section>
+</div>
+<div id="lightbox" class="hide"></div>
+<section id ="lbAddPics" style="" class="widget hide">
+
+</section>
+<!-- common libraries. required for every page>
+<script src="lib/jquery/dist/jquery.min.js"></script>
+<script src="lib/jquery-pjax/jquery.pjax.js"></script>
+<script src="lib/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+<script src="lib/widgster/widgster.js"></script>
+<script src="lib/underscore/underscore.js"></script-->
+
+<!-- common application js >
+<script src="js/app.js"></script-->
+<script src="/libs/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/libs/node_modules/nouislider/distribute/nouislider.min.js"></script>
+<script src="/libs/node_modules/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCA7I8K8xwhXXDUJHixLr1wIwMx1D_nY80" async defer></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/newuser.js"></script>
+
+
+<!-- page specific scripts -->
+
+
+</body>
+</html>

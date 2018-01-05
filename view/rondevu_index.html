@@ -1,0 +1,53 @@
+j<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{params.name}}</title>
+        <link rel="icon" href="/images/favicon.png">
+        <link href="css/application.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <style>
+            a, a:hover {
+                text-decoration:none;
+                font-weight:bold;
+                color:white;
+            </style>
+
+            <!--link rel="shortcut icon" href="img/favicon.png"-->
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="description" content="">
+            <meta name="author" content="">
+            <meta charset="utf-8">
+            <script>
+                /* yeah we need this empty stylesheet here. It's cool chrome & chromium fix
+                 chrome fix https://code.google.com/p/chromium/issues/detail?id=167083
+                 https://code.google.com/p/chromium/issues/detail?id=332189
+                 */
+            </script>
+        </head>
+        <body class="background-light">
+            <div class="single-widget-container">
+                <section class="widget login-widget">
+                    <header class="text-align-center">
+                       <h3><strong>{{params.name}}</strong></h3>
+                    </header>
+                    <div class="body">
+                        <a href="/facebook">
+                            <footer>
+                                <div class="facebook-login">
+                                    <span><i class="fa fa-facebook-square fa-lg"></i> Login with Facebook</span>
+                                </div>
+
+                            </footer>
+                        </a>
+                </section>
+
+            </div>
+            <div class="" style="  position: fixed;
+                 left: 50%;
+                 bottom: 20px;
+                 transform: translate(-50%, -50%);
+                 margin: 0 auto;">
+                <a href="/privacy"><span>Privacy Policy</span></a>
+            </div>
+        </body>
+    </html>

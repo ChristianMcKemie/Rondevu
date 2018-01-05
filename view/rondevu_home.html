@@ -1,0 +1,535 @@
+<html>
+    <head>
+        <title>Rondevu</title>
+        <link href="/css/application.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/libs/node_modules/nouislider/distribute/nouislider.min.css">
+        <link rel="stylesheet" href="/libs/node_modules/croppie/croppie.css" />
+        <link rel="manifest" href="/manifest.json">
+        <link rel="icon" sizes="192x192" href="/images/favicon.png">
+        <link rel="canonical" href="">
+        <link rel="stylesheet" href="/css/main.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta charset="utf-8">
+        <script>
+        </script>
+    </head>
+    <body class="background-light">
+        <div class="logo" style="cursor:default">
+            <h3><strong title="Welcome to Rondevu">{{params.name}}</strong></h3>
+        </div>
+        <nav id="sidebar" class="sidebar nav-collapse collapse">
+            <ul id="side-nav" class="side-nav">
+                <li class="randomizebutton active pointer">
+                    <a><i class="fa fa-random"></i> <span class="name">Randomize</span></a>
+                </li>      <li class="findmatchesbutton active pointer">
+                    <a ><i class="fa fa-heart"></i> <span class="name">Find Matches</span></a>
+                </li>
+        </nav>    <div class="wrap">
+            <header class="page-header">
+                <div class="navbar">
+                    <ul class="nav navbar-nav navbar-right pull-right">
+                        <li class="dropdown pointer">
+                            <a id="settings"
+                               title="Settings"
+                               data-toggle="popover"
+                               data-placement="bottom">
+                                <i class="fa fa-cog"></i>
+                            </a>
+                        </li>
+                        <li class="dropdown pointer">
+                            <a title="Profile" id="profileedit" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-user"></i>
+                            </a>
+                        </li>
+                        <li title="Logout" class="dropdown pointer"><a href="http://facebook.com/logout.php?next={{params.host}}/logout&access_token={{credentials.token}}"><i class="fa fa-sign-out"></i></a></li>
+                    </ul>
+                    <form id="search-form" class="navbar-form pull-right hide" role="search">
+                        <input type="search" class="form-control search-query" placeholder="Search...">
+                    </form>
+                    <div style="" class="notifications">
+                        <div class="alert">
+                            {{#if this.new}}
+                            Welcome to Rondevu!
+                            {{/if}}
+                            {{#if this.existing}}
+                            Welcome Back {{this.credentials.profile.name.first}}
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </header>   
+            <div class="container">
+                <div id="phone-nav" class="nav navbar-nav" style="">
+                    <span class="findmatchesbutton pointer" style="padding-right:7%;" ><i class="fa fa-heart"></i> <span class="name">Find Matches</span></span>
+                    <span class="randomizebutton pointer"><i class="fa fa-random"></i> <span class="name">Randomize</span></span>
+                </div>
+            </div>
+            <div class="content container">
+                <div class="row">
+
+                    <div class="col-lg-8">
+
+
+
+                        <section id ="randomizewindow" class="widget findmatches">
+                            <div class="widget-controls">
+                                <div id='randomfilter' class="pointer" style="margin:10px;"  title="filter" >filter <i class="fa fa-sort-desc"></i></div>
+                                <div id="randomfilterdropdown" style="width:100px; text-align: center;" class="dropdown-menu account hide" role="menu">
+                                    <div role="presentation" position="1" class="{{#if filterInt}}ranFilterSelected{{/if}} account-picture ranfilter pointer">
+                                        Sex
+                                    </div>
+                                    <div role="presentation" position="2" class="{{#if filterAge}}ranFilterSelected{{/if}} account-picture ranfilter pointer">
+                                        Age
+                                    </div>
+                                    <div role="presentation" position="3" class="{{#if filterLoc}}ranFilterSelected{{/if}} account-picture ranfilter pointer">
+                                        Location
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="videos">
+                                <video id="mini-video" class="hidden" autoplay muted></video>
+                                <video id="remote-video" class="hidden" autoplay></video>
+                                <video id="local-video" class="" autoplay muted></video>
+                            </div>
+
+                            <div class="hide tensecprofilediv" id="tensecprofileshowdiv" style="">
+                                <div id="tensecprofile" style = "">
+
+                                    <div id="tensecpic" style=""></div>
+                                    <span id="tensecname"></span>
+                                    <div id="tensectimer" style="top: 45px;position: relative;"></div>
+                                </div>
+                            </div>
+
+                            <div id="confirm-join-div" class="">
+                                <button id="confirm-join-button">START</button>
+                            </div>
+                            <div class="status-div" id="status-div"></div>
+                            <div id ="randomMatchHistory" style="width:100%;height:100px;text-align: center;">
+                                {{#each randomizeHistory}}
+                                <span matchprofileid="{{this.userId}}" style="{{#if this.like}}border:3px solid #56bc76;{{/if}} background-image:url('images/{{this.userId}}/{{this.pic1}}.jpg');" name="" class="pointer ranHistory"></span>
+                                {{/each}}
+                            </div>
+                            <div id="footer">
+                                <div id="sharing-div">
+                                    <div id="room-link"></div>
+                                </div>
+                                <div id="info-div"></div>
+                            </div>
+                            <div id="icons" class="icons hideIcons">
+                                <svg id="mute-audio" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+                                <title>Title</title>
+                                <circle cx="24" cy="24" r="34">
+                                <title>Mute audio</title>
+                                </circle>
+                                <path class="on" transform="scale(0.6), translate(17,18)" d="M38 22h-3.4c0 1.49-.31 2.87-.87 4.1l2.46 2.46C37.33 26.61 38 24.38 38 22zm-8.03.33c0-.11.03-.22.03-.33V10c0-3.32-2.69-6-6-6s-6 2.68-6 6v.37l11.97 11.96zM8.55 6L6 8.55l12.02 12.02v1.44c0 3.31 2.67 6 5.98 6 .45 0 .88-.06 1.3-.15l3.32 3.32c-1.43.66-3 1.03-4.62 1.03-5.52 0-10.6-4.2-10.6-10.2H10c0 6.83 5.44 12.47 12 13.44V42h4v-6.56c1.81-.27 3.53-.9 5.08-1.81L39.45 42 42 39.46 8.55 6z" fill="white"/>
+                                <path class="off" transform="scale(0.6), translate(17,18)"  d="M24 28c3.31 0 5.98-2.69 5.98-6L30 10c0-3.32-2.68-6-6-6-3.31 0-6 2.68-6 6v12c0 3.31 2.69 6 6 6zm10.6-6c0 6-5.07 10.2-10.6 10.2-5.52 0-10.6-4.2-10.6-10.2H10c0 6.83 5.44 12.47 12 13.44V42h4v-6.56c6.56-.97 12-6.61 12-13.44h-3.4z"  fill="white"/>
+                                </svg>
+                                <svg id="mute-video" class="hide" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+                                <circle cx="24" cy="24" r="34">
+                                <title>Mute video</title>
+                                </circle>
+                                <path class="on" transform="scale(0.6), translate(17,16)" d="M40 8H15.64l8 8H28v4.36l1.13 1.13L36 16v12.36l7.97 7.97L44 36V12c0-2.21-1.79-4-4-4zM4.55 2L2 4.55l4.01 4.01C4.81 9.24 4 10.52 4 12v24c0 2.21 1.79 4 4 4h29.45l4 4L44 41.46 4.55 2zM12 16h1.45L28 30.55V32H12V16z" fill="white"/>
+                                <path class="off" transform="scale(0.6), translate(17,16)" d="M40 8H8c-2.21 0-4 1.79-4 4v24c0 2.21 1.79 4 4 4h32c2.21 0 4-1.79 4-4V12c0-2.21-1.79-4-4-4zm-4 24l-8-6.4V32H12V16h16v6.4l8-6.4v16z" fill="white"/>
+                                </svg>
+                                <svg id="fullscreen" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+                                <circle cx="24" cy="24" r="34">
+                                <title>Enter fullscreen</title>
+                                </circle>
+                                <path class="on" transform="scale(0.8), translate(7,6)" d="M10 32h6v6h4V28H10v4zm6-16h-6v4h10V10h-4v6zm12 22h4v-6h6v-4H28v10zm4-22v-6h-4v10h10v-4h-6z" fill="white"/>
+                                <path class="off" transform="scale(0.8), translate(7,6)"  d="M14 28h-4v10h10v-4h-6v-6zm-4-8h4v-6h6v-4H10v10zm24 14h-6v4h10V28h-4v6zm-6-24v4h6v6h4V10H28z" fill="white"/>
+                                </svg>
+                                <svg id="hangup" class="hidden" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+                                <circle cx="24" cy="24" r="34">
+                                <title>Hangup</title>
+                                </circle>
+                                <path transform="scale(0.7), translate(11,10)" d="M24 18c-3.21 0-6.3.5-9.2 1.44v6.21c0 .79-.46 1.47-1.12 1.8-1.95.98-3.74 2.23-5.33 3.7-.36.35-.85.57-1.4.57-.55 0-1.05-.22-1.41-.59L.59 26.18c-.37-.37-.59-.87-.59-1.42 0-.55.22-1.05.59-1.42C6.68 17.55 14.93 14 24 14s17.32 3.55 23.41 9.34c.37.36.59.87.59 1.42 0 .55-.22 1.05-.59 1.41l-4.95 4.95c-.36.36-.86.59-1.41.59-.54 0-1.04-.22-1.4-.57-1.59-1.47-3.38-2.72-5.33-3.7-.66-.33-1.12-1.01-1.12-1.8v-6.21C30.3 18.5 27.21 18 24 18z" fill="white"/>
+                                </svg>
+                            </div>
+                            <div id="timer" class="timer hide">1:00</div>
+
+
+                        </section>
+
+
+                        <section id ="findmatcheswindow" style="min-height:275px;" class="widget findmatches hide">
+                            <!--hiding hide-->
+                            <div id="matchshow" class="" style="margin-top:20px">
+                                <div class="center-block"   style="max-width:500px;"  >
+                                    <!--div style="width:500px; background:#ccc;">
+                                        <div style="background:blue; width:200px; height:200px;"></div>
+                                        <div style="background:red; width:250px; height:100px; margin:-200px 0 0 220px;"></div>
+                                    </div-->
+                                    <div id = 'findmatchprofile' class="img-responsive center-block" style=" height:230px;">
+                                        <div id = 'matchpicdiv' class ="center-block"  style="cursor:pointer; height: 200px; width:200px; overflow:hidden">
+                                            <img style="border-radius: 3px; max-width:200px;" id="matchpic" src="" class="hide"/>
+                                            <i style="top: 18px; margin:82.5px;" id="loading" class="fa fa-refresh fa-3x fa-spin hide"></i>
+                                            <i style="margin:82.5px;" id="refresh" class="fa fa-refresh fa-3x pointer hide"></i>
+                                        </div>
+                                        <div>
+                                            <i style="text-align: center;vertical-align: middle;" id="name" class="center-block"></i>
+                                            <i style="text-align: right;vertical-align: middle; margin:-30px 0 0 80px;" id="dist" class="hide"></i>
+                                        </div>
+                                        <div id = 'findmatchprofileinfo' class='hide' style="width:250px; height:100px; margin:-218px 0 0 245px;">
+                                            <i style="height:40px;" class="otherpics" id="matchpic2" ></i>
+                                            <i style="height:40px;" class="otherpics" id="matchpic3" ></i>
+                                            <i style="height:40px;" class="otherpics" id="matchpic4" ></i>
+                                            <i style="height:40px;" class="otherpics" id="matchpic5" ></i>
+                                            <i style="height:40px;" class="otherpics" id="matchpic6" ></i>
+                                            <p id="findabout" style=" overflow:hidden;height: 145px;"></p>
+                                        </div>
+                                    </div> </div>
+                                <div style="position:relative; top:12px;" class="text-center">
+
+                                    <i id="dislike" class="fa fa-times fa-5x pointer"></i>
+                                    <i id="like" class="fa fa-check fa-5x pointer"></i>
+                                </div>      
+                            </div>
+                        </section>
+                        <section id ="profileeditwindow" class="widget profile hide">
+                            <!--hiding hide-->
+                            <header>
+                                <h4>
+                                    <i class="fa fa-user"></i> <span class="name">Profile</span>
+                                </h4>
+                                <div class="widget-controls">
+                                    <span id='profileeditclosebutton' class="closesection pointer" title="Close" ><i class="fa fa-times"></i></span>
+                                </div>
+                            </header>
+                            <div class="">
+                                <br>
+                                <br>
+                                <div>
+
+                                    <div class="">
+                                        <span class="name pull-left">Pictures</span>
+                                        <span id="addPic" class="pull-right pointer hide" style="">add</span>
+                                        <span id="removePic" class="pull-right pointer hide" style="">remove</span>
+                                    </div>
+                                </div>
+                                <br>
+                                <br><br>
+                                <div id="pictureframe" style="" class="center-block">
+                                    <div id="main-picture" style="">
+                                        <div id="pic1" content="" order ="1" alt="" class="pic1 picswap" style=""/> </div>
+                                </div>
+                                <div id="pictures" style="">
+                                    <span class="pic2-6Frame">
+                                        <div id="pic2" content="" order ="2" alt=""  class="picswap pic2-6" style=""/></div>
+                                </span>
+                                <span class="pic2-6Frame">
+                                    <div id="pic3" content="" order ="3" alt=""  class="picswap pic2-6" style=""/></div>
+                            </span>
+                            <span class="pic2-6Frame">
+                                <div id="pic4" content="" order ="4" alt=""  class="picswap pic2-6" style=""/></div>
+                            </span>
+                            <span class="pic2-6Frame">
+                                <div id="pic5" content="" order ="5" alt=""  class="picswap pic2-6" style=""/></div>
+                            </span>
+                            <span class="pic2-6Frame">
+                                <div id="pic6" content="" order ="6" alt=""  class="picswap pic2-6" style=""/></div>
+                            </span>
+                    </div>
+                </div>
+                <br><br>
+                <span class="name">About</span>
+                <textarea id='about' rows='1' placeholder=''></textarea>
+                <span class="name">Education</span>
+                <br>
+                <div id="education" style=""></div>
+                <br>
+                <br>
+                <br>
+                <div class="center-block" style="">
+                    <button style="width:76px;" class="btn btn-transparent btn" id="profileedit-submit" type="button">apply</button>
+                    <span id='deleteaccount' style="" class="pointer" title="Delete Account" ><i class="fa fa-trash"></i> Delete Account</span>
+                </div>
+            </div>
+        </section>
+        <section id ="settingswindow" class="widget settings hide">
+            <!--hiding hide-->
+            <header>
+                <h4>
+                    <i class="fa fa-gear"></i> <span class="name">Settings</span>
+                </h4>
+                <div class="widget-controls">
+                    <span id='settingsclosebutton' class="closesection pointer"  title="Close" ><i class="fa fa-times"></i></span>
+                </div>
+            </header>
+            <div class="">
+                <br>
+                <br>
+                <span class="name">Interested In</span>
+                <br>
+                <br><br>
+                <div id="interest-slider" style="margin-left:50px;margin-right:50px;"></div>
+                <br>
+                <span class="name">Age Range</span>
+                <br><br><br>
+                <div id="age-slider" style="margin-left:50px;margin-right:50px;"></div>
+                <br>
+                <span class="name">Distance</span>
+                <br>
+                <br><br>
+                <div id="distance-slider" style="margin-left:50px;margin-right:50px;"></div>
+                <br>
+                <span class="name">Location</span>
+                <br><br>
+                <br>
+                <div id="google_canvas" class="hide"></div>
+                <br>
+                <br>
+                <div class="center-block" style="width:500px;height:32px">
+                    <button style="width:76px;" class="btn btn-transparent btn" id="settings-submit" type="button">apply</button>
+                </div></div>
+        </section>
+    </div>
+    <div class="col-lg-4">    
+        <section id="matchesandfavoriteswindow" class="widget widget-tabs">
+            <header>
+                <ul class="nav">
+                    <li class="active">
+                        <a style="text-align: center;" class="center-block">Matches</a>
+                    </li>
+                </ul>
+            </header>
+            <div class="body tab-content">
+                <div id="stats" class="tab-pane active clearfix">
+                    <ul id="match-list" class="news-list">
+                        {{#each matches}}
+                        <li><div matchProfileId="{{this._id}}" name="{{this.name}}" class="pull-left img-circle pointer"><img
+                                    {{#if this.pic1}}
+                                    src="images/{{this._id}}/{{this.pic1}}.jpg"
+                                    {{else}}
+                                    src="images/null.jpg"
+                                    {{/if}}
+                                    alt="" /></div><div class="news-item-info"><span id="userName">{{this.name}}</span> 
+                                <span class="online {{#if this.offline}}hide{{/if}}" style="font-weight:bold;color:rgb(76, 175, 80);" matchProfileId="{{this._id}}">ONLINE</span>
+                                <span class="rrdroparrow pull-right pointer" style="" id="" matchProfileId="{{this._id}}"><i class="fa fa-sort-desc" aria-hidden="true"></i></span>
+                                <div id="account-menu" class="matchdrop hide dropdown-menu account" role="menu">
+                                    <div role="presentation" class="account-picture report pointer">
+                                        Report
+                                    </div>
+                                    <div role="presentation" class="account-picture unmatch pointer">
+                                        Unmatch
+                                    </div>
+                                </div>
+
+                                <div class="position"><span class="chat" matchProfileId="{{this._id}}" name="{{this.name}}"><i class="fa fa-comments fa-2x"></i> 
+                                        <span class="missedchatscount hide" style="" class="">0</span><span class="missedmessage" style="font-size: 14px; margin-left:10px;">{{#if this.lastmessage}}{{this.lastmessage}}{{/if}}</span></span>
+                                    <i pic1="{{this.pictures.pic1}}" matchProfileId="{{this._id}}" name="{{this.name}}" class="videocall fa fa-phone-square fa-2x {{#if this.offline}}hide{{/if}}">
+                                    </i>
+                                </div></div></li>
+                        {{else}}
+                        <li id="no-matches">
+                            <div style="text-align:center">No Matches</div>
+                        </li>                                            
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <section id="chatwindow" class="widget xlarge hide">
+            <header>
+                <h4>
+                    <i class="fa fa-comments" aria-hidden="true"></i> <span id="chat-name" class="name"></span>
+                </h4>
+                <div class="widget-controls">
+                    <span class="closesection pointer"  title="Close" ><i class="fa fa-times"></i></span>
+                </div>
+            </header>
+            <div class="body">
+                <div id="chat" class="">
+                    <div id="chat-messages" class="chat-messages" style="overflow: hidden; width: auto; height: 340px;">
+                    </div>
+                    <footer class="chat-footer row">
+                        <div class="col-xs-9">
+                            <input id="new-message" type="text" class="form-control input-transparent" placeholder="Enter your message..">
+                        </div>
+                        <div class="col-xs-3">
+                            <button type="button" id="new-message-btn" class="btn btn-transparent">Send</button>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</div>
+</div>
+<div id="lightbox" class="hide"></div>
+
+<section id="lbReport" class="position hide" style="">
+    Report for:<br><br><div class="text">
+        <div id="account-menu" class="" role="menu">
+            <div position="1" class="account-picture reportOp pointer">
+                Inappropriate Content
+            </div>
+            <div position="2" class="account-picture reportOp pointer">
+                Spam or Bot
+            </div>
+            <div position="3" class="account-picture reportOp pointer">
+                Account Misrepresentation (Catfish)
+            </div>
+            <div position="4" class="account-picture reportOp pointer">
+                Ulterior Motives
+            </div>
+            <div position="5" class="account-picture reportOp pointer">
+                Harassment
+            </div><br><br>
+            Briefly describe what happened:
+            <textarea style="border:1px solid white;" id="reportDisc" rows="1" placeholder=""></textarea>
+            <button id="reportsubmit" style="margin-left:12px; margin-top:35px;color:black;" class="btn" disabled>submit</button>
+        </div>
+        <!--button style="margin-right:12px; margin-top:35px;" class="delete-yes btn btn-danger">YES</button>
+        <button style="margin-left:12px; margin-top:35px;" class="delete-no btn btn-success">NO</button-->
+    </div></section>
+
+<section id="lbDeleteAccount" class="yesno position hide" style="">
+    Do you really wish to delete your account?<br><div class="text">
+        <button style="margin-right:12px; margin-top:35px;" class="delete-yes btn btn-danger">YES</button>
+        <button style="margin-left:12px; margin-top:35px;" class="delete-no btn btn-success">NO</button>
+    </div></section>
+
+<section id="lbFacebookorImport" class="yesno position hide" style="">
+    Import from?<br><div class="text">
+        <button id="FacebookaddPic" style="margin-right:12px; margin-top:35px; background: #618fb0;" class="facebook-login btn"><i class="fa fa-facebook-square fa-lg"></i> Facebook</button>
+        <!--button id="UploadaddPic" style="margin-left:12px; margin-top:35px;" class="delete-no btn btn-success">Upload</button-->
+        
+        <label style="margin-left:12px; margin-top:35px;" class="btn btn-default btn-file">
+    Upload <input id="upload" accept="image/*" type="file" style="display: none;">
+</label>
+        <!--input class="btn" type="file" -->
+                             
+    </div></section>
+
+<section id="lbUploadaddPic" class="croppie position hide" style="">
+    <div id='UploadaddPic' class=""></div>
+    <button class="upload-result btn btn-default btn-success">Finish</button>
+   </section>
+
+<section id="lbAddRandom" class="yesno position hide" style="">
+    <div class="text">
+        <button style="margin-right:12px;" class="ran-matchreq btn btn-success">Match Request</button>
+        <button style="margin-left:12px;" class="ran-report btn btn-danger ">Report</button>
+    </div></section>
+
+<section id="lbUnmatch" class="yesno position hide" style="">
+    <br><div class="text">
+        <button style="margin-right:12px; margin-top:35px;" class="unmatch-yes btn btn-danger">YES</button>
+        <button style="margin-left:12px; margin-top:35px;" class="unmatch-no btn btn-success">NO</button>
+    </div></section>
+
+<section id="lb-Inc-Callbox" class="hide">
+    <div id="callboxdiv" class="position text-center"><div class="pull-left inccallboximgdiv"><img class="inccallboximg" src="" alt=""></div>
+        <div id="answerRejectText"></div>
+        <i id ="videocallyes" style="margin-left:30px;margin-right:12px;margin-top:38px;color:green;" class="videocallyes fa fa-phone-square fa-5x hide"></i>
+        <i id ="videocallno" style="margin-left:12px; margin-top:38px;color:red" class="pointer fa fa-phone-square fa-5x fa-rotate-270">
+
+        </i></div></section>
+
+<section id ="lbAddPics" style="" class="widget hide">
+
+</section>
+<section id ="profilelightbox" style="" class="widget hide">
+    <header><h4></h4><div class="widget-controls">
+            <span class="lbclosesection" title="Close"><i class="fa fa-times pointer"></i></span>
+        </div></header></br>
+    <div id='lbpictureframe' style='' class='center-block'>
+        <div id='lbmain-picture'><div id="lbpic1" class='lbpic1 hide'></div></div>
+        <div id='lbpictures'>
+            <div id="lbpic2" alt='' class='lbpic2-6 hide' ></div>
+            <div id="lbpic3" alt='' class='lbpic2-6 hide' ></div>
+            <div id="lbpic4" alt='' class='lbpic2-6 hide' ></div>
+            <div id="lbpic5" alt='' class='lbpic2-6 hide' ></div>
+            <div id="lbpic6" alt='' class='lbpic2-6 hide' ></div>
+        </div></div>
+        <div id='lbNameAgeDist'>
+            <span id='lbName'></span> <span id='lbAge'></span><span id='lbDistance'></span>
+        </div><div class='text text-center' style= "margin-top: 30px;" id='lbEdu'></div><div><br><div class='text' id='lbAbout'>
+            </section>
+            <style>
+                /* Always set the map height explicitly to define the size of the div
+                 * element that contains the map. */
+                #google_canvas {
+                    height: 400px;
+                    width:100%;
+                }
+            </style>
+            <!-- page specific scripts -->
+            <script src="/libs/node_modules/jquery/dist/jquery.min.js"></script>
+            <script src="/libs/node_modules/nouislider/distribute/nouislider.min.js"></script>
+            <script src="/libs/node_modules/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCA7I8K8xwhXXDUJHixLr1wIwMx1D_nY80" async defer></script>
+            <script src="/socket.io/socket.io.js"></script>
+            <script src="/libs/node_modules/croppie/croppie.js"></script>
+            <script src="/js/home.js"></script>
+             
+            {{params.include_loopback_js}}
+            <script src="/js/randomizechat.js"></script>
+            <script>
+            var socket = io('{{params.host}}');
+            var usersloginid = '{{ronid}}';
+            var usersloginname = "{{credentials.profile.raw.first_name}}";
+            var user_state = "{{userstate}}";
+            {{#if error_messages}}
+            var errorMessages = {{params.error_messages}};
+            {{ else}}
+            var errorMessages = [];
+            {{/if}}
+            {{#if warning_messages}}
+            var warningMessages = {{params.warning_messages}};
+            {{ else}}
+            var warningMessages = [];
+            {{/if}}
+            {{#if version_info}}
+            var versionInfo = {{params.version_info}};
+            {{ else}}
+            var versionInfo = [];
+            {{/if}}
+                    var loadingParams = {
+                    errorMessages: errorMessages,
+                            warningMessages: warningMessages,
+                            isLoopback: {{params.is_loopback}},
+                    {{#if room_id}}
+                    roomId: '{{params.room_id}}',
+                            roomLink: '{{params.room_link}}',
+                    {{/if}}
+                            roomServer:'',
+                            ronid: '{{params.ronid}}',
+                            mediaConstraints: {{{params.media_constraints}}},
+                            offerOptions: {{{params.offer_options}}},
+                            peerConnectionConfig: {{{params.pc_config}}},
+                            peerConnectionConstraints: {{{params.pc_constraints}}},
+                            turnRequestUrl: '{{params.turn_url}}',
+                            turnTransports: '{{params.turn_transports}}',
+                            wssUrl: '{{params.wss_url}}',
+                            wssPostUrl: '{{params.wss_post_url}}',
+                            bypassJoinConfirmation: {{params.bypass_join_confirmation}},
+                            versionInfo: versionInfo
+                    };
+                    console.log(loadingParams);
+                    var appController;
+                    function initialize() {
+                    if (document.visibilityState === 'prerender') {
+                    document.addEventListener('visibilitychange', onVisibilityChange);
+                    return;
+                    }
+                    appController = new AppController(loadingParams);
+                    }
+                    function onVisibilityChange() {
+                    if (document.visibilityState === 'prerender') {
+                    return;
+                    }
+                    document.removeEventListener('visibilitychange', onVisibilityChange);
+                    initialize();
+                    }
+                    initialize();
+            </script>
+           
+
+            </body>
+            </html>

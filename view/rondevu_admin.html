@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <title>Rondevu</title>
+        <link href="/css/application.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/libs/node_modules/nouislider/distribute/nouislider.min.css">
+        <link rel="manifest" href="/manifest.json">
+        <link rel="icon" sizes="192x192" href="/images/favicon.png">
+        <link rel="canonical" href="">
+        <link rel="stylesheet" href="/css/main.css">
+        <style>
+        </style>
+        <link rel="icon" href="/images/favicon.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta charset="utf-8">
+        <script>
+            /* yeah we need this empty stylesheet here. It's cool chrome & chromium fix
+             chrome fix https://code.google.com/p/chromium/issues/detail?id=167083
+             https://code.google.com/p/chromium/issues/detail?id=332189
+             */
+        </script>
+    </head>
+    <body class="background-light">
+        <div class="logo" style="cursor:default">
+            <h3><strong title="Welcome to Rondevu">admin</strong></h3>
+        </div>
+        <nav id="sidebar" class="sidebar nav-collapse collapse">
+            <ul id="side-nav" class="side-nav">
+                <li id ="reportedusersbutton" class="active pointer">
+                    <a><span class="name">Reported Users</span></a>
+                </li><li id="picapprovalbutton" class="active pointer">
+                    <a ><span class="name">Uploaded Pic Approval</span></a>
+                </li>
+        </nav>    <div class="wrap">
+            <header class="page-header">
+                <div class="navbar">
+                    <ul class="nav navbar-nav navbar-right pull-right">
+                        <li  title="Logout" class="dropdown pointer"><a href="http://facebook.com/logout.php?next=https://therondevu.com/logout&access_token={{credentials.token}}"><i class="fa fa-sign-out"></i></a></li>
+                    </ul>
+                    <form id="search-form" class="navbar-form pull-right hide" role="search">
+                        <input type="search" class="form-control search-query" placeholder="Search...">
+                    </form>
+                    <div class="notifications pull-right">
+                        <!--div class="alert pull-right">
+                            <a  class="close" data-dismiss="alert">&times;</a>
+                            <i class="fa fa-info-circle mr-xs"></i>
+                            Welcome to Rondevu!
+                            <a id="notification-link" >settings</a>
+                        </div-->
+                    </div>
+                </div>
+            </header>   
+            <div class="container">
+                <div id="phone-nav" class="nav navbar-nav" style="">
+                    <span class="findmatchesbutton pointer" style="padding-right:7%;" ><i class="fa fa-heart"></i> <span class="name">Find Matches</span></span>
+                    <span class="randomizebutton pointer"><i class="fa fa-random"></i> <span class="name">Randomize</span></span>
+                </div>
+            </div>
+            <div class="content container">
+                <div class="row">
+
+                    <div class="col-lg-8">
+                        <section id ="reporteduserswindow" style="min-height:275px;" class="widget findmatches">
+                            <!--hiding hide-->
+                            <div id="matchshow" class="" style="margin-top:20px">
+                                <div class="center-block"   style="max-width:500px;"  >
+                                    <!--div style="width:500px; background:#ccc;">
+                                        <div style="background:blue; width:200px; height:200px;"></div>
+                                        <div style="background:red; width:250px; height:100px; margin:-200px 0 0 220px;"></div>
+                                    </div-->
+                                    <div id = 'reportprofile' class="img-responsive center-block" style=" height:230px;">
+                                        <div id = 'reportpicdiv' class =""  style="cursor:pointer; height: 200px; width:200px; overflow:hidden">
+                                            <img style="border-radius: 3px; max-width:200px;" id="reportpic" src="" class=""/>
+                                            <i style="top: 18px; margin:82.5px;" id="loading" class="fa fa-refresh fa-3x fa-spin hide"></i>
+                                            <i style="margin:82.5px;" id="refresh" class="fa fa-refresh fa-3x pointer hide"></i>
+                                        </div>
+                                        <div>
+                                            <i style="text-align: center;vertical-align: middle;" id="name" class="center-block"></i>
+                                            <i style="text-align: right;vertical-align: middle; margin:-30px 0 0 80px;" id="dist" class="hide"></i>
+                                        </div>
+                                        <div id = 'findmatchprofileinfo' class='' style="width:250px; height:100px; margin:-218px 0 0 245px;">
+                                            <i style="height:40px;" class="otherpics" id="matchpic2" ></i>
+                                            <i style="height:40px;" class="otherpics" id="matchpic3" ></i>
+                                            <i style="height:40px;" class="otherpics" id="matchpic4" ></i>
+                                            <i style="height:40px;" class="otherpics" id="matchpic5" ></i>
+                                            <i style="height:40px;" class="otherpics" id="matchpic6" ></i>
+                                            <p id="reportabout" style="word-break: break-all; overflow:hidden;height: 145px;"></p>
+                                        </div>
+                                    </div> </div>
+                                <div style="position:relative; top:12px;" class="">
+
+                                    <span style="">
+                                        <i class="fa fa-sort-asc fa-5x pointer" aria-hidden="true"></i>
+                                        <i class="fa fa-sort-desc fa-5x pointer" aria-hidden="true"></i>
+                                    </span>
+                                    <i class="fa  fa-chevron-left fa-5x pointer" style=""></i>
+                                    <i class="fa  fa-chevron-right fa-5x pointer" style="  "></i>
+                                    <i id="ban" class="fa fa-user-times fa-5x pointer" style="position: absolute; right: 0px; "></i>
+                                </div>      
+                            </div>
+                        </section>
+
+
+
+                    </div>
+                    <div class="col-lg-4">    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="lightbox" class="hide"></div>
+
+
+
+        <!-- page specific scripts -->
+        <script src="/libs/node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="/libs/node_modules/nouislider/distribute/nouislider.min.js"></script>
+        <script src="/libs/node_modules/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCA7I8K8xwhXXDUJHixLr1wIwMx1D_nY80" async defer></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/admin.js"></script>
+
+
+    </body>
+</html>
